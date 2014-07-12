@@ -16,6 +16,7 @@ namespace Okienkowa_2
         bool turn = true; // true = X, false = O;
         int turn_count = 0;
 
+
         public Form1()
         {
             InitializeComponent();
@@ -33,7 +34,23 @@ namespace Okienkowa_2
 
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            turn = true;
+            turn_count = 0;
+
+            try
+            {
+                foreach (Control item in Controls)
+                {
+                    Button b = (Button)item;
+                    item.Enabled = true;
+                    b.Text = "";
+                }
+            }
+            catch { }
+
             
+
+
         }
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
@@ -59,53 +76,75 @@ namespace Okienkowa_2
 
             b.Enabled = false;
 
+            turn_count ++;
+
             checkForWinner();
 
         }
 
-        private void draw()
+        private void disableButtons()
         {
-            if(turn_count == 9)
+            try
             {
-                MessageBox.Show("It's a DRAW!");
+                foreach (Control item in Controls)
+                {
+                    Button b = (Button)item;
+                    item.Enabled = false;
+                }
             }
+            catch { }
+            
         }
+
 
         private void checkForWinner()
         {
             bool thereIsWinner = false;
 
+
             if ((b11.Text == b12.Text) && (b12.Text == b13.Text) && b11.Enabled == false)
                 thereIsWinner = true;
-            if ((b21.Text == b22.Text) && (b22.Text == b23.Text) && b21.Enabled == false)
+            else if ((b21.Text == b22.Text) && (b22.Text == b23.Text) && b21.Enabled == false)
                 thereIsWinner = true;
-            if ((b31.Text == b32.Text) && (b32.Text == b33.Text) && b31.Enabled == false)
+            else if ((b31.Text == b32.Text) && (b32.Text == b33.Text) && b31.Enabled == false)
                 thereIsWinner = true;
+            
 
             if ((b11.Text == b21.Text) && (b21.Text == b31.Text) && b11.Enabled == false)
                 thereIsWinner = true;
-            if ((b12.Text == b22.Text) && (b22.Text == b32.Text) && b12.Enabled == false)
+            else if ((b12.Text == b22.Text) && (b22.Text == b32.Text) && b12.Enabled == false)
                 thereIsWinner = true;
-            if ((b13.Text == b23.Text) && (b23.Text == b33.Text) && b13.Enabled == false)
+            else if ((b13.Text == b23.Text) && (b23.Text == b33.Text) && b13.Enabled == false)
                 thereIsWinner = true;
 
             if ((b11.Text == b22.Text) && (b22.Text == b33.Text) && b11.Enabled == false)
                 thereIsWinner = true;
-            if ((b13.Text == b22.Text) && (b22.Text == b31.Text) && b13.Enabled == false)
+            else if ((b13.Text == b22.Text) && (b22.Text == b31.Text) && b13.Enabled == false)
                 thereIsWinner = true;
 
-            if (thereIsWinner == true)
+
+            if (thereIsWinner)
             {
-                MessageBox.Show("Mamy zwycięzcę");
-                try
+                disableButtons();
+                
+                string winner = "";
+                if (turn)
                 {
-                    foreach (Control item in Controls)
-                    {
-                        Button b = (Button)item;
-                        item.Enabled = false;
-                    }
-                } catch{}
+                    winner = "O";
+                }
+                else
+                    winner = "X";
+
+                MessageBox.Show(winner + " is the WINNER!!!", "Win...");
+               
             }
+            else
+            {
+                if (turn_count == 9)
+                    MessageBox.Show("Mamy remis!", "Wtopa!");
+            }
+            
         }
+
     }
 }
